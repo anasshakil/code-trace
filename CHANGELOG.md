@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/anasshakil/code-trace/compare/v1.0.0...v1.0.1) (2026-06-03)
+
+
+### Bug Fixes
+
+* update publish command in .releaserc.json to remove PAT usage for VSCE ([bcab0bd](https://github.com/anasshakil/code-trace/commit/bcab0bd987ced303cbea5855fc3b624a789083cf))
+
 # 1.0.0 (2026-06-03)
 
 
