@@ -1,7 +1,7 @@
 {
 	"name": "code-trace",
 	"displayName": "Code Trace",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "⚡ Copy code snippets bundled with their file paths and line numbers for easy sharing.",
 	"publisher": "anasshakil",
 	"keywords": [
