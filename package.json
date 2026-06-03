@@ -1,0 +1,104 @@
+{
+	"name": "code-trace",
+	"displayName": "Code Trace",
+	"version": "0.0.1",
+	"description": "⚡ Copy code snippets bundled with their file paths and line numbers for easy sharing.",
+	"publisher": "anasshakil",
+	"keywords": [
+		"code",
+		"trace",
+		"permalink",
+		"address",
+		"snip"
+	],
+	"categories": [
+		"Other"
+	],
+	"icon": "images/icon.png",
+	"homepage": "https://github.com/anasshakil/code-trace#readme",
+	"bugs": {
+		"url": "https://github.com/anasshakil/code-trace/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/anasshakil/code-trace.git"
+	},
+	"license": "MIT",
+	"author": "Anas Shakil",
+	"type": "commonjs",
+	"main": "./dist/extension.js",
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"activationEvents": [],
+	"contributes": {
+		"commands": [
+			{
+				"command": "codeTrace.copy",
+				"title": "Copy Code Reference",
+				"category": "Code Trace"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "codeTrace.copy",
+				"key": "ctrl+alt+c",
+				"mac": "cmd+alt+c",
+				"when": "editorTextFocus"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "codeTrace.copy",
+					"when": "editorTextFocus",
+					"group": "9_cutcopypaste"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "codeTrace.copy",
+					"when": "editorTextFocus"
+				}
+			]
+		},
+		"configuration": {
+			"title": "Code Trace",
+			"properties": {
+				"codeTrace.multiSelection": {
+					"type": "string",
+					"enum": [
+						"primary",
+						"perSelection",
+						"span"
+					],
+					"enumDescriptions": [
+						"Copy only the primary (first) selection.",
+						"Copy each non-empty selection as a separate line, sorted ascending.",
+						"Copy a single range spanning the min start to the max end of all selections."
+					],
+					"default": "primary",
+					"description": "How to handle multiple cursors/selections when copying a code reference."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"compile": "node esbuild.js",
+		"watch": "node esbuild.js --watch",
+		"package": "node esbuild.js --production",
+		"check-types": "tsc --noEmit",
+		"lint": "biome check",
+		"format": "biome format --write .",
+		"test": "node --import tsx --test \"src/**/*.test.ts\"",
+		"vscode:prepublish": "npm run package"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.16",
+		"@types/node": "^24.12.4",
+		"@types/vscode": "^1.75.0",
+		"esbuild": "^0.25.0",
+		"tsx": "^4.22.4",
+		"typescript": "^6.0.3"
+	}
+}

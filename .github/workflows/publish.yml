@@ -1,0 +1,26 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - run: npm ci
+
+      - run: npm run package
+
+      - name: Publish to VS Code Marketplace
+        run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
+
+      - name: Publish to Open VSX
+        run: npx ovsx publish -p ${{ secrets.OVSX_PAT }}
