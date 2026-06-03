@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/anasshakil/code-trace/compare/v1.0.1...v1.1.0) (2026-06-03)
+
+
+### Features
+
+* add reference builder for imports ([5942f5c](https://github.com/anasshakil/code-trace/commit/5942f5c28693b916d48790864a02964f64309996))
+
 ## [1.0.1](https://github.com/anasshakil/code-trace/compare/v1.0.0...v1.0.1) (2026-06-03)
 
 
