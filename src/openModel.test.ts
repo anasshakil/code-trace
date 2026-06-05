@@ -40,7 +40,8 @@ test("dirOf — bare filename", () => {
 test("formatItem — invalid", () => {
 	const r = row({ kind: "invalid", label: "junk", raw: "junk" });
 	assert.deepEqual(formatItem(r, "invalid", ""), {
-		label: "$(error) junk",
+		icon: "$(error)",
+		label: "junk",
 		description: "unrecognized",
 	});
 });
@@ -48,7 +49,8 @@ test("formatItem — invalid", () => {
 test("formatItem — not found without dir", () => {
 	const r = row({ label: "foo.ts:10-20" });
 	assert.deepEqual(formatItem(r, "notFound", ""), {
-		label: "$(warning) foo.ts:10-20",
+		icon: "$(warning)",
+		label: "foo.ts:10-20",
 		description: "not found",
 	});
 });
@@ -56,7 +58,8 @@ test("formatItem — not found without dir", () => {
 test("formatItem — not found with dir", () => {
 	const r = row({ path: "src/lib/foo.ts", label: "foo.ts:10-20" });
 	assert.deepEqual(formatItem(r, "notFound", "src/lib"), {
-		label: "$(warning) foo.ts:10-20",
+		icon: "$(warning)",
+		label: "foo.ts:10-20",
 		description: "src/lib — not found",
 	});
 });
@@ -64,7 +67,8 @@ test("formatItem — not found with dir", () => {
 test("formatItem — found single", () => {
 	const r = row({ kind: "single" });
 	assert.deepEqual(formatItem(r, "found", "src"), {
-		label: "$(file) foo.ts:10-20",
+		icon: "$(file)",
+		label: "foo.ts:10-20",
 		description: "src",
 	});
 });
@@ -75,7 +79,8 @@ test("formatItem — found aggregate", () => {
 		label: "foo.ts (2 selections)",
 	});
 	assert.deepEqual(formatItem(r, "found", "src"), {
-		label: "$(symbol-array) foo.ts (2 selections)",
+		icon: "$(symbol-array)",
+		label: "foo.ts (2 selections)",
 		description: "src",
 	});
 });

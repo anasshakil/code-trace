@@ -9,8 +9,25 @@ type ParsingMode = "tolerant" | "tolerantVerbose";
 type BoxBehavior = "smartReparse" | "autoFilterPasteParse" | "alwaysParse";
 
 interface RowItem extends vscode.QuickPickItem {
+	icon?: string;
 	row?: ResultRow;
 	uri?: vscode.Uri;
+}
+
+/** URI used to derive file-type icons from the active file icon theme. */
+function resourceUriForPath(path: string): vscode.Uri {
+	const folder = vscode.workspace.workspaceFolders?.[0];
+	return folder !== undefined
+		? vscode.Uri.joinPath(folder.uri, path)
+		: vscode.Uri.file(path);
+}
+
+function withFileIcon(item: RowItem, resourceUri: vscode.Uri): RowItem {
+	return {
+		...item,
+		iconPath: vscode.ThemeIcon.File,
+		resourceUri,
+	};
 }
 
 /** Resolve a workspace-relative path to a real file across all roots. */
@@ -40,8 +57,8 @@ async function buildItems(
 	const items: RowItem[] = [];
 	for (const row of rows) {
 		if (row.kind === "invalid") {
-			const { label, description } = formatItem(row, "invalid", "");
-			items.push({ label, description, row });
+			const { icon, label, description } = formatItem(row, "invalid", "");
+			items.push({ icon, label, description, row });
 			continue;
 		}
 
@@ -54,13 +71,18 @@ async function buildItems(
 		const dir = dirOf(row.path);
 
 		if (uri === null) {
-			const { label, description } = formatItem(row, "notFound", dir);
-			items.push({ label, description, row });
+			const { icon, label, description } = formatItem(row, "notFound", dir);
+			items.push(
+				withFileIcon(
+					{ icon, label, description, row },
+					resourceUriForPath(row.path),
+				),
+			);
 			continue;
 		}
 
-		const { label, description } = formatItem(row, "found", dir);
-		items.push({ label, description, row, uri });
+		const { icon, label, description } = formatItem(row, "found", dir);
+		items.push(withFileIcon({ icon, label, description, row, uri }, uri));
 	}
 	return items;
 }
@@ -111,7 +133,7 @@ async function openReference(): Promise<void> {
 	const restore = vscode.window.activeTextEditor;
 
 	const qp = vscode.window.createQuickPick<RowItem>();
-	qp.placeholder = "Paste code references (e.g. src/hello.ts:100-120)…";
+	qp.placeholder = "Paste code references (e.g. src/hello.ts:1-10)…";
 	qp.matchOnDescription = true;
 
 	let accepted = false;

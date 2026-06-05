@@ -19,22 +19,28 @@ export function formatItem(
 	row: ResultRow,
 	state: ItemState,
 	dir: string,
-): { label: string; description: string } {
+): { icon: string; label: string; description: string } {
 	if (state === "invalid") {
 		return {
-			label: `$(error) ${row.label}`,
+			icon: "$(error)",
+			label: row.label,
 			description: "unrecognized",
 		};
 	}
+
 	if (state === "notFound") {
 		return {
-			label: `$(warning) ${row.label}`,
+			icon: "$(warning)",
+			label: row.label,
 			description: dir ? `${dir} — not found` : "not found",
 		};
 	}
+
 	const icon = row.kind === "aggregate" ? "$(symbol-array)" : "$(file)";
+
 	return {
-		label: `${icon} ${row.label}`,
+		icon,
+		label: row.label,
 		description: dir,
 	};
 }
