@@ -99,24 +99,30 @@ function buildSelections(
 	});
 }
 
-async function revealRow(
+async function openRowInEditor(
 	item: RowItem,
 	preview: boolean,
 ): Promise<vscode.TextEditor | null> {
 	if (item.uri === undefined || item.row === undefined) return null;
+
 	const doc = await vscode.workspace.openTextDocument(item.uri);
+
 	const editor = await vscode.window.showTextDocument(doc, {
 		preview,
 		preserveFocus: preview,
 	});
+
 	if (item.row.ranges.length > 0) {
 		const selections = buildSelections(doc, item.row);
+
 		const primary = selections[0];
+
 		if (primary !== undefined) {
 			editor.selections = selections;
 			editor.revealRange(primary, vscode.TextEditorRevealType.InCenter);
 		}
 	}
+
 	return editor;
 }
 
@@ -172,22 +178,26 @@ async function openReference(): Promise<void> {
 	qp.onDidChangeActive((active) => {
 		const item = active[0];
 		if (item?.uri !== undefined && rowAction === "preview") {
-			void revealRow(item, true);
+			void openRowInEditor(item, true);
 		}
 	});
 
 	qp.onDidAccept(() => {
 		const item = qp.selectedItems[0];
+
 		if (item === undefined) return;
+
 		if (item.uri === undefined) {
 			vscode.window.showWarningMessage(
 				`Code Trace: file not found — ${item.row?.path ?? "?"}`,
 			);
 			return;
 		}
+
 		accepted = true;
 		qp.hide();
-		void revealRow(item, false);
+
+		void openRowInEditor(item, false);
 	});
 
 	qp.onDidHide(() => {
