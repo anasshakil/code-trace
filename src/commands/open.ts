@@ -9,25 +9,24 @@ type ParsingMode = "tolerant" | "tolerantVerbose";
 type BoxBehavior = "smartReparse" | "autoFilterPasteParse" | "alwaysParse";
 
 interface RowItem extends vscode.QuickPickItem {
-	icon?: string;
 	row?: ResultRow;
 	uri?: vscode.Uri;
 }
 
-/** URI used to derive file-type icons from the active file icon theme. */
-function resourceUriForPath(path: string): vscode.Uri {
-	const folder = vscode.workspace.workspaceFolders?.[0];
-	return folder !== undefined
-		? vscode.Uri.joinPath(folder.uri, path)
-		: vscode.Uri.file(path);
+// resourceUri icon-derivation from file icon theme requires VSCode 1.106+
+const supportsFileTypeIcon = (() => {
+	const parts = vscode.version.split(".").map(Number);
+	const maj = parts[0] ?? 0;
+	const min = parts[1] ?? 0;
+	return maj > 1 || (maj === 1 && min >= 106);
+})();
+
+function themeIconFrom(codicon: string): vscode.ThemeIcon {
+	return new vscode.ThemeIcon(codicon.replace(/^\$\(|\)$/g, ""));
 }
 
 function withFileIcon(item: RowItem, resourceUri: vscode.Uri): RowItem {
-	return {
-		...item,
-		iconPath: vscode.ThemeIcon.File,
-		resourceUri,
-	};
+	return { ...item, iconPath: vscode.ThemeIcon.File, resourceUri };
 }
 
 /** Resolve a workspace-relative path to a real file across all roots. */
@@ -58,7 +57,7 @@ async function buildItems(
 	for (const row of rows) {
 		if (row.kind === "invalid") {
 			const { icon, label, description } = formatItem(row, "invalid", "");
-			items.push({ icon, label, description, row });
+			items.push({ label, description, row, iconPath: themeIconFrom(icon) });
 			continue;
 		}
 
@@ -72,17 +71,16 @@ async function buildItems(
 
 		if (uri === null) {
 			const { icon, label, description } = formatItem(row, "notFound", dir);
-			items.push(
-				withFileIcon(
-					{ icon, label, description, row },
-					resourceUriForPath(row.path),
-				),
-			);
+			items.push({ label, description, row, iconPath: themeIconFrom(icon) });
 			continue;
 		}
 
 		const { icon, label, description } = formatItem(row, "found", dir);
-		items.push(withFileIcon({ icon, label, description, row, uri }, uri));
+		items.push(
+			supportsFileTypeIcon
+				? withFileIcon({ label, description, row, uri }, uri)
+				: { label, description, row, uri, iconPath: themeIconFrom(icon) },
+		);
 	}
 	return items;
 }
