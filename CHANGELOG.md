@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/anasshakil/code-trace/compare/v1.2.0...v1.3.0) (2026-06-05)
+
+
+### Features
+
+* implement search ([8be1feb](https://github.com/anasshakil/code-trace/commit/8be1febb2a781ed53691663bdb122fc4a079aa16))
+
 # [1.2.0](https://github.com/anasshakil/code-trace/compare/v1.1.0...v1.2.0) (2026-06-05)
 
 
