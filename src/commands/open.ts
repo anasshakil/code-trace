@@ -7,6 +7,7 @@ import { groupReferences, parseReferences } from "@/parseReference";
 type OpenSource = "auto" | "paste";
 type ParsingMode = "tolerant" | "tolerantVerbose";
 type BoxBehavior = "smartReparse" | "autoFilterPasteParse" | "alwaysParse";
+type RowAction = "preview" | "noAction";
 
 interface RowItem extends vscode.QuickPickItem {
 	row?: ResultRow;
@@ -125,12 +126,15 @@ async function openReference(): Promise<void> {
 	const grouping = cfg.get<GroupingMode>("openGrouping", "aggregate");
 	const parsing = cfg.get<ParsingMode>("openParsing", "tolerant");
 	const box = cfg.get<BoxBehavior>("openBoxBehavior", "smartReparse");
+	const rowAction = cfg.get<RowAction>("openRowAction", "preview");
+
 	const verbose = parsing === "tolerantVerbose";
 
 	const cache = new Map<string, vscode.Uri | null>();
 	const restore = vscode.window.activeTextEditor;
 
 	const qp = vscode.window.createQuickPick<RowItem>();
+
 	qp.placeholder = "Paste code references (e.g. src/hello.ts:1-10)…";
 	qp.matchOnDescription = true;
 
@@ -167,7 +171,9 @@ async function openReference(): Promise<void> {
 
 	qp.onDidChangeActive((active) => {
 		const item = active[0];
-		if (item?.uri !== undefined) void revealRow(item, true);
+		if (item?.uri !== undefined && rowAction === "preview") {
+			void revealRow(item, true);
+		}
 	});
 
 	qp.onDidAccept(() => {

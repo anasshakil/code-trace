@@ -134,6 +134,19 @@
 					"default": "tolerant",
 					"description": "How to handle input lines that don't match the path:line format."
 				},
+				"codeTrace.openRowAction": {
+					"type": "string",
+					"enum": [
+						"preview",
+						"noAction"
+					],
+					"enumDescriptions": [
+						"Preview the file and reveal the row as you navigate results in the picker.",
+						"Do nothing until you accept a result."
+					],
+					"default": "preview",
+					"description": "What happens when a result row becomes active in the Open Code Reference picker."
+				},
 				"codeTrace.openBoxBehavior": {
 					"type": "string",
 					"enum": [
