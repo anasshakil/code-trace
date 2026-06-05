@@ -37,6 +37,11 @@
 				"command": "codeTrace.copy",
 				"title": "Copy Code Reference",
 				"category": "Code Trace"
+			},
+			{
+				"command": "codeTrace.open",
+				"title": "Open Code Reference",
+				"category": "Code Trace"
 			}
 		],
 		"keybindings": [
@@ -45,6 +50,11 @@
 				"key": "ctrl+alt+c",
 				"mac": "cmd+alt+c",
 				"when": "editorTextFocus"
+			},
+			{
+				"command": "codeTrace.open",
+				"key": "ctrl+alt+shift+o",
+				"mac": "cmd+alt+shift+o"
 			}
 		],
 		"menus": {
@@ -59,6 +69,9 @@
 				{
 					"command": "codeTrace.copy",
 					"when": "editorTextFocus"
+				},
+				{
+					"command": "codeTrace.open"
 				}
 			]
 		},
@@ -79,6 +92,75 @@
 					],
 					"default": "primary",
 					"description": "How to handle multiple cursors/selections when copying a code reference."
+				},
+				"codeTrace.openSource": {
+					"type": "string",
+					"enum": [
+						"auto",
+						"paste"
+					],
+					"enumDescriptions": [
+						"Read the clipboard automatically and populate results when the picker opens.",
+						"Open an empty picker and parse references as you paste/type."
+					],
+					"default": "auto",
+					"description": "Where Open Code Reference gets its input from."
+				},
+				"codeTrace.openGrouping": {
+					"type": "string",
+					"enum": [
+						"aggregate",
+						"aggregateAndRange",
+						"range"
+					],
+					"enumDescriptions": [
+						"Collapse multiple ranges of the same file into one result that selects all ranges (multi-cursor).",
+						"Show the collapsed multi-cursor result and the individual range results.",
+						"Show every reference as its own result row."
+					],
+					"default": "aggregate",
+					"description": "How to group multiple references that point to the same file."
+				},
+				"codeTrace.openParsing": {
+					"type": "string",
+					"enum": [
+						"tolerant",
+						"tolerantVerbose"
+					],
+					"enumDescriptions": [
+						"Silently drop lines that are not valid references.",
+						"Also show unrecognized lines as disabled rows."
+					],
+					"default": "tolerant",
+					"description": "How to handle input lines that don't match the path:line format."
+				},
+				"codeTrace.openRowAction": {
+					"type": "string",
+					"enum": [
+						"preview",
+						"noAction"
+					],
+					"enumDescriptions": [
+						"Preview the file and reveal the row as you navigate results in the picker.",
+						"Do nothing until you accept a result."
+					],
+					"default": "preview",
+					"description": "What happens when a result row becomes active in the Open Code Reference picker."
+				},
+				"codeTrace.openBoxBehavior": {
+					"type": "string",
+					"enum": [
+						"smartReparse",
+						"autoFilterPasteParse",
+						"alwaysParse"
+					],
+					"enumDescriptions": [
+						"Parse the input when it looks like references, otherwise fuzzy-filter existing results.",
+						"Fuzzy-filter in Auto source; parse on change in Paste source.",
+						"Always parse the input box into results on every change."
+					],
+					"default": "smartReparse",
+					"description": "What typing in the picker input box does to the results."
 				}
 			}
 		}
@@ -103,7 +185,7 @@
 		"@semantic-release/git": "^10.0.1",
 		"@semantic-release/github": "^12.0.8",
 		"@types/node": "^24.12.4",
-		"@types/vscode": "^1.75.0",
+		"@types/vscode": "^1.120.0",
 		"esbuild": "^0.25.0",
 		"husky": "^9.1.7",
 		"semantic-release": "^25.0.3",

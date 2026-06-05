@@ -10,7 +10,7 @@ const aliasPlugin = {
 	name: "alias",
 	setup(build) {
 		build.onResolve({ filter: /^@\// }, (args) => ({
-			path: path.resolve(__dirname, "src", args.path.slice(2)),
+			path: path.resolve(__dirname, "src", `${args.path.slice(2)}.ts`),
 		}));
 	},
 };
