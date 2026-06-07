@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/anasshakil/code-trace/compare/v1.3.0...v1.3.1) (2026-06-07)
+
+
+### Bug Fixes
+
+* add support for quickPickItemResource API proposal in package.json ([81064ae](https://github.com/anasshakil/code-trace/commit/81064aef48126565d28bc3fcbd7334e720658674))
+
 # [1.3.0](https://github.com/anasshakil/code-trace/compare/v1.2.0...v1.3.0) (2026-06-05)
 
 
