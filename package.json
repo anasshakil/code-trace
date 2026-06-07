@@ -30,6 +30,9 @@
 	"engines": {
 		"vscode": "^1.75.0"
 	},
+	"enabledApiProposals": [
+		"quickPickItemResource"
+	],
 	"activationEvents": [],
 	"contributes": {
 		"commands": [
